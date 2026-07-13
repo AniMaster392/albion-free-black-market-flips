@@ -1,4 +1,4 @@
-﻿# Albion Black Market Flipper
+# Albion Free Black Market Flips
 
 A local browser tool for finding manual Albion Online Black Market flips.
 
