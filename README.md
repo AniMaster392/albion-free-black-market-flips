@@ -27,7 +27,7 @@ In the Windows release zip, double-clicking this starts the Python-built app ser
 Open this folder in VS Code:
 
 ```text
-E:\trash\trash\albion-blackmarket-flipper
+E:\albion-blackmarket-flipper
 ```
 
 Use the Live Server extension and click:
