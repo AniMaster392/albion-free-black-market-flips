@@ -1,0 +1,1245 @@
+<div id="albion-flipper-app">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090806;
+      --panel: #15120d;
+      --panel-2: #211a10;
+      --line: #6d5425;
+      --text: #fffaf0;
+      --muted: #d8c7a4;
+      --accent: #f6c453;
+      --accent-2: #fff2b8;
+      --danger: #ff6b6b;
+      --warn: #f6c453;
+      --focus: #ffd166;
+      font-family: Inter, Segoe UI, system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(246, 196, 83, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 250, 240, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 12% 0%, rgba(246, 196, 83, 0.16), transparent 28rem),
+        radial-gradient(circle at 82% 4%, rgba(255, 242, 184, 0.10), transparent 28rem),
+        linear-gradient(135deg, #080705, #11100d 55%, #070604);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto;
+      color: var(--text);
+    }
+
+    #albion-flipper-app {
+      min-height: 100vh;
+      padding: 22px;
+    }
+
+    .shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(18, 15, 10, 0.96), rgba(28, 23, 15, 0.90));
+      backdrop-filter: blur(12px);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(24px, 3vw, 38px);
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 17px;
+      font-weight: 650;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--muted);
+      max-width: 820px;
+      line-height: 1.45;
+    }
+
+    .status-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #2b2112, #17120b);
+      color: var(--muted);
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(246, 196, 83, 0.18), 0 0 18px rgba(246, 196, 83, 0.45);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(14, 12, 8, 0.94);
+    }
+
+    .controls {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .scanner-bar {
+      display: grid;
+      grid-template-columns: minmax(150px, 200px) minmax(150px, 220px) auto auto auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .compact-rules {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(104px, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
+    .more-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      padding-top: 4px;
+    }
+
+    .section {
+      display: grid;
+      gap: 10px;
+    }
+
+    details.section {
+      display: block;
+    }
+
+    details.section[open] {
+      display: grid;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 650;
+      list-style-position: inside;
+    }
+
+    .route-line {
+      display: grid;
+      gap: 4px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #0d0b08;
+      color: var(--text);
+    }
+
+    .route-line span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #0d0b08;
+      color: var(--text);
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus,
+    button:focus-visible {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.14);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #0d0b08;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .check input {
+      width: auto;
+      accent-color: var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: linear-gradient(180deg, #2b2112, #17120b);
+      color: var(--text);
+      min-height: 38px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: linear-gradient(180deg, #ffd166, #b7791f);
+      border-color: rgba(255, 242, 184, 0.78);
+      color: #171007;
+      font-weight: 650;
+    }
+
+    button:hover {
+      border-color: var(--accent-2);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(24, 19, 11, 0.96), rgba(14, 12, 8, 0.96));
+      min-height: 88px;
+      display: grid;
+      align-content: space-between;
+      gap: 7px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric strong {
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 700;
+    }
+
+    .workbench {
+      display: grid;
+      gap: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: end;
+      justify-content: space-between;
+      padding: 14px;
+    }
+
+    .toolbar-fields {
+      display: grid;
+      grid-template-columns: minmax(180px, 1.2fr) minmax(140px, 0.7fr) minmax(140px, 0.7fr);
+      gap: 10px;
+      flex: 1;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-top: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 920px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      background: rgba(24, 23, 22, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .item-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 240px;
+    }
+
+    .item-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      object-fit: contain;
+      border-radius: 6px;
+      background: rgba(9, 8, 6, 0.82);
+      border: 1px solid var(--line);
+    }
+
+    .item-name {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .item-name code {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .profit {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .loss {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 4px 8px;
+      color: var(--muted);
+      background: rgba(20, 20, 20, 0.6);
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 32px 18px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .notice {
+      padding: 12px 14px;
+      border: 1px solid rgba(246, 196, 83, 0.45);
+      background: rgba(246, 196, 83, 0.08);
+      border-radius: 8px;
+      color: var(--warn);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 980px) {
+      #albion-flipper-app {
+        padding: 12px;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .layout,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+
+      .scanner-bar,
+      .compact-rules {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .row,
+      .checks,
+      .file-row {
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+
+  <div class="shell">
+    <header>
+      <div>
+        <h1>Albion Black Market Flipper</h1>
+        <p class="subtitle">Rank manual flip opportunities from city market sell prices to Black Market buy prices. Use live Albion Data Project prices or import your own capture/export.</p>
+      </div>
+      <div class="status-stack"><div class="status-pill"><span>Player</span><strong id="playerNameText">Unknown</strong></div><div class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Ready</span></div></div>
+    </header>
+
+    <div class="layout">
+      <section class="panel controls" aria-label="Market scanner setup">
+        <div class="scanner-bar">
+          <label>
+            Server
+            <select id="serverSelect">
+              <option value="west">West / Americas</option>
+              <option value="east" selected>East / Asia</option>
+              <option value="europe">Europe</option>
+            </select>
+          </label>
+          <label>
+            Player
+            <input id="playerName" type="text" placeholder="Your name">
+          </label>
+          <button class="primary" id="loadLiveButton" type="button">Load Live Prices</button>
+          <button id="demoButton" type="button">Demo</button>
+
+          <label class="check">
+            <input id="showAll" type="checkbox">
+            <span>Debug losses</span>
+          </label>
+        </div>
+
+        <div class="compact-rules">
+          <label>
+            Min profit
+            <input id="minProfit" type="number" min="0" step="1000" value="1">
+          </label>
+          <label>
+            Min ROI %
+            <input id="minRoi" type="number" min="0" step="1" value="0">
+          </label>
+          <label>
+            Account
+            <select id="accountType">
+              <option value="premium" selected>Premium</option>
+              <option value="nonpremium">Non-premium</option>
+            </select>
+          </label>
+          <label>
+            Sell tax %
+            <input id="taxRate" type="number" min="0" max="20" step="0.1" value="4">
+          </label>
+          <label>
+            Max age min
+            <input id="maxAge" type="number" min="1" max="1440" step="1" value="30">
+          </label>
+          <label>
+            Max buy
+            <input id="maxBuy" type="number" min="0" step="10000" value="0">
+          </label>
+          <label>
+            Qty
+            <input id="quantity" type="number" min="1" step="1" value="1">
+          </label>
+        </div>
+
+        <details>
+          <summary>More options</summary>
+          <div class="more-panel">
+            <div class="section">
+              <div class="file-row">
+                <label>
+                  Import JSON/CSV
+                  <input id="fileInput" type="file" accept=".json,.csv,.txt">
+                </label>
+                <button id="clearButton" type="button">Clear</button>
+              </div>
+              <p class="small">Import is optional. Live prices update after Albion Data Client uploads market rows.</p>
+            </div>
+
+            <details class="section">
+              <summary>Advanced item list</summary>
+              <label>
+                Item IDs
+                <textarea id="itemIds"></textarea>
+              </label>
+              <div class="actions">
+                <button id="starterItemsButton" type="button">T4.0-T8.4 Gear List</button>
+                <button id="clearItemsButton" type="button">Clear Items</button>
+              </div>
+            </details>
+
+            <details class="section">
+              <summary>Advanced source markets</summary>
+              <div class="route-line">
+                Default source is Caerleon Market
+                <span>Turn on other cities only if you want transport flips.</span>
+              </div>
+              <div class="checks" id="cityChecks"></div>
+            </details>
+          </div>
+        </details>
+      </section>
+
+      <main class="workbench">
+        <section class="metrics">
+          <div class="metric">
+            <span>Best Profit</span>
+            <strong id="bestProfit">0</strong>
+            <span id="bestProfitMeta">No flips yet</span>
+          </div>
+          <div class="metric">
+            <span>Best ROI</span>
+            <strong id="bestRoi">0%</strong>
+            <span id="bestRoiMeta">No flips yet</span>
+          </div>
+          <div class="metric">
+            <span>Shown Flips</span>
+            <strong id="shownCount">0</strong>
+            <span id="totalCount">0 total scanned</span>
+          </div>
+          <div class="metric">
+            <span>Total Potential</span>
+            <strong id="totalPotential">0</strong>
+            <span id="potentialMeta">At selected quantity</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="toolbar">
+            <div class="toolbar-fields">
+              <label>
+                Search
+                <input id="searchBox" type="search" placeholder="Item, city, or ID">
+              </label>
+              <label>
+                Sort
+                <select id="sortBy">
+                  <option value="profit">Profit</option>
+                  <option value="roi">ROI</option>
+                  <option value="buy">Lowest buy price</option>
+                  <option value="age">Freshest data</option>
+                </select>
+              </label>
+              <label>
+                Quality
+                <select id="qualityFilter">
+                  <option value="all">All qualities</option>
+                  <option value="1">Normal</option>
+                  <option value="2">Good</option>
+                  <option value="3">Outstanding</option>
+                  <option value="4">Excellent</option>
+                  <option value="5">Masterpiece</option>
+                </select>
+              </label>
+            </div>
+            <button id="exportButton" type="button">Export CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table aria-label="Black Market flip opportunities">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Buy City</th>
+                  <th>Quality</th>
+                  <th>Buy Price</th>
+                  <th>Black Market</th>
+                  <th>Net Sell</th>
+                  <th>Profit</th>
+                  <th>ROI</th>
+                  <th>Age</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+          <div class="empty" id="emptyState">Load live prices, import data, or use demo data to start scanning.</div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const CITIES = ["Bridgewatch", "Caerleon", "Fort Sterling", "Lymhurst", "Martlock", "Thetford", "Brecilien"];
+    const BLACK_MARKET = "Black Market";
+    const SERVER_APIS = {
+      west: {
+        label: "West / Americas",
+        apiBase: "https://west.albion-online-data.com/api/v2/stats/prices/"
+      },
+      east: {
+        label: "East / Asia",
+        apiBase: "https://east.albion-online-data.com/api/v2/stats/prices/"
+      },
+      europe: {
+        label: "Europe",
+        apiBase: "https://europe.albion-online-data.com/api/v2/stats/prices/"
+      }
+    };
+    const QUALITY_NAMES = {
+      1: "Normal",
+      2: "Good",
+      3: "Outstanding",
+      4: "Excellent",
+      5: "Masterpiece"
+    };
+
+    const BASE_ITEM_CODES = [
+      "BAG", "CAPE",
+      "HEAD_PLATE_SET1", "ARMOR_PLATE_SET1", "SHOES_PLATE_SET1",
+      "HEAD_LEATHER_SET1", "ARMOR_LEATHER_SET1", "SHOES_LEATHER_SET1",
+      "HEAD_CLOTH_SET1", "ARMOR_CLOTH_SET1", "SHOES_CLOTH_SET1",
+      "MAIN_SWORD", "2H_CLAYMORE", "MAIN_AXE", "2H_BOW",
+      "MAIN_FIRESTAFF", "MAIN_HOLYSTAFF", "MAIN_NATURESTAFF", "OFF_SHIELD"
+    ];
+    const SCAN_TIERS = [4, 5, 6, 7, 8];
+    const SCAN_ENCHANTS = [0, 1, 2, 3, 4];
+    const STARTER_ITEMS = buildEnchantedItemList();
+
+    const NAME_HINTS = {
+      BAG: "Bag",
+      CAPE: "Cape",
+      HEAD_PLATE_SET1: "Soldier Helmet",
+      ARMOR_PLATE_SET1: "Soldier Armor",
+      SHOES_PLATE_SET1: "Soldier Boots",
+      HEAD_LEATHER_SET1: "Mercenary Hood",
+      ARMOR_LEATHER_SET1: "Mercenary Jacket",
+      SHOES_LEATHER_SET1: "Mercenary Shoes",
+      HEAD_CLOTH_SET1: "Scholar Cowl",
+      ARMOR_CLOTH_SET1: "Scholar Robe",
+      SHOES_CLOTH_SET1: "Scholar Sandals",
+      MAIN_SWORD: "Broadsword",
+      "2H_CLAYMORE": "Claymore",
+      MAIN_AXE: "Battleaxe",
+      "2H_BOW": "Bow",
+      MAIN_FIRESTAFF: "Fire Staff",
+      MAIN_HOLYSTAFF: "Holy Staff",
+      MAIN_NATURESTAFF: "Nature Staff",
+      OFF_SHIELD: "Shield"
+    };
+
+    let marketRows = [];
+    let flips = [];
+
+    const els = {
+      cityChecks: document.getElementById("cityChecks"),
+      itemIds: document.getElementById("itemIds"),
+      serverSelect: document.getElementById("serverSelect"),
+      playerName: document.getElementById("playerName"),
+      playerNameText: document.getElementById("playerNameText"),
+      loadLiveButton: document.getElementById("loadLiveButton"),
+      demoButton: document.getElementById("demoButton"),
+      starterItemsButton: document.getElementById("starterItemsButton"),
+      clearItemsButton: document.getElementById("clearItemsButton"),
+      fileInput: document.getElementById("fileInput"),
+      clearButton: document.getElementById("clearButton"),
+      showAll: document.getElementById("showAll"),
+      minProfit: document.getElementById("minProfit"),
+      minRoi: document.getElementById("minRoi"),
+      accountType: document.getElementById("accountType"),
+      taxRate: document.getElementById("taxRate"),
+      maxAge: document.getElementById("maxAge"),
+      maxBuy: document.getElementById("maxBuy"),
+      quantity: document.getElementById("quantity"),
+      searchBox: document.getElementById("searchBox"),
+      sortBy: document.getElementById("sortBy"),
+      qualityFilter: document.getElementById("qualityFilter"),
+      exportButton: document.getElementById("exportButton"),
+      resultsBody: document.getElementById("resultsBody"),
+      emptyState: document.getElementById("emptyState"),
+      bestProfit: document.getElementById("bestProfit"),
+      bestProfitMeta: document.getElementById("bestProfitMeta"),
+      bestRoi: document.getElementById("bestRoi"),
+      bestRoiMeta: document.getElementById("bestRoiMeta"),
+      shownCount: document.getElementById("shownCount"),
+      totalCount: document.getElementById("totalCount"),
+      totalPotential: document.getElementById("totalPotential"),
+      potentialMeta: document.getElementById("potentialMeta"),
+      statusText: document.getElementById("statusText")
+    };
+
+    function init() {
+      els.cityChecks.innerHTML = CITIES.map(city => `
+        <label class="check">
+          <input type="checkbox" value="${city}" ${city === "Caerleon" ? "checked" : ""}>
+          <span>${city}</span>
+        </label>
+      `).join("");
+      els.itemIds.value = STARTER_ITEMS.join("\n");
+      els.playerName.value = localStorage.getItem("albionPlayerName") || "";
+      updatePlayerName();
+      setStatus(`Ready: ${STARTER_ITEMS.length.toLocaleString()} T4.0-T8.4 item IDs`);
+      bindEvents();
+      render();
+    }
+
+    function bindEvents() {
+      els.loadLiveButton.addEventListener("click", loadLivePrices);
+      els.demoButton.addEventListener("click", loadDemoData);
+      els.playerName.addEventListener("input", () => {
+        localStorage.setItem("albionPlayerName", els.playerName.value.trim());
+        updatePlayerName();
+      });
+      els.starterItemsButton.addEventListener("click", () => {
+        els.itemIds.value = STARTER_ITEMS.join("\n");
+        setStatus(`Loaded ${STARTER_ITEMS.length.toLocaleString()} T4.0-T8.4 item IDs`);
+      });
+      els.clearItemsButton.addEventListener("click", () => {
+        els.itemIds.value = "";
+        setStatus("Item list cleared");
+      });
+      els.clearButton.addEventListener("click", () => {
+        marketRows = [];
+        flips = [];
+        els.fileInput.value = "";
+        setStatus("Data cleared");
+        render();
+      });
+      els.fileInput.addEventListener("change", handleFile);
+      els.exportButton.addEventListener("click", exportCsv);
+      els.accountType.addEventListener("change", () => {
+        els.taxRate.value = els.accountType.value === "premium" ? "4" : "8";
+        render();
+      });
+      [
+        els.showAll, els.minProfit, els.minRoi, els.taxRate, els.maxAge, els.maxBuy,
+        els.quantity, els.searchBox, els.sortBy, els.qualityFilter
+      ].forEach(el => el.addEventListener("input", render));
+      els.cityChecks.addEventListener("change", () => {
+        computeFlips();
+        render();
+      });
+      els.serverSelect.addEventListener("change", () => {
+        const server = selectedServer();
+        marketRows = [];
+        flips = [];
+        setStatus(`Server set to ${server.label}`);
+        render();
+      });
+    }
+
+    function buildEnchantedItemList() {
+      return BASE_ITEM_CODES.flatMap(code => {
+        return SCAN_TIERS.flatMap(tier => {
+          return SCAN_ENCHANTS.map(enchant => `T${tier}_${code}${enchant ? `@${enchant}` : ""}`);
+        });
+      });
+    }
+
+    function parseItems() {
+      return els.itemIds.value
+        .split(/[\s,]+/)
+        .map(value => value.trim().toUpperCase())
+        .filter(Boolean);
+    }
+
+    function selectedCities() {
+      return [...els.cityChecks.querySelectorAll("input:checked")].map(input => input.value);
+    }
+
+    function selectedServer() {
+      return SERVER_APIS[els.serverSelect.value] || SERVER_APIS.west;
+    }
+
+    async function loadLivePrices() {
+      const items = parseItems();
+      const cities = selectedCities();
+      if (!items.length) {
+        setStatus("Add item IDs first");
+        return;
+      }
+      if (!cities.length) {
+        setStatus("Pick at least one source city");
+        return;
+      }
+
+      const server = selectedServer();
+      setBusy(true, `Loading ${server.label} prices...`);
+      try {
+        const locations = [...cities, BLACK_MARKET].join(",");
+        const chunks = chunk(items, 120);
+        const responses = await Promise.all(chunks.map(async part => {
+          const itemPath = part.map(encodeURIComponent).join(",");
+          const url = `${server.apiBase}${itemPath}?locations=${encodeURIComponent(locations)}&qualities=1,2,3,4,5`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        }));
+        const allRows = responses.flat();
+        marketRows = normalizeRows(allRows);
+        computeFlips();
+        setStatus(`Loaded ${marketRows.length.toLocaleString()} ${server.label} price rows`);
+        render();
+      } catch (error) {
+        console.error(error);
+        setStatus("Live load failed. Import data or use demo data.");
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function loadDemoData() {
+      const now = new Date();
+      const demoItems = STARTER_ITEMS.slice(0, 32);
+      marketRows = [];
+      demoItems.forEach((itemId, index) => {
+        const quality = index % 5 + 1;
+        const base = 8000 + (index + 1) * 4200;
+        selectedCities().forEach((city, cityIndex) => {
+          marketRows.push({
+            item_id: itemId,
+            city,
+            quality,
+            sell_price_min: Math.round(base * (0.86 + cityIndex * 0.035 + (index % 3) * 0.03)),
+            buy_price_max: 0,
+            timestamp: new Date(now.getTime() - (index + cityIndex) * 45 * 60000).toISOString()
+          });
+        });
+        marketRows.push({
+          item_id: itemId,
+          city: BLACK_MARKET,
+          quality,
+          sell_price_min: 0,
+          buy_price_max: Math.round(base * (1.12 + (index % 5) * 0.045)),
+          timestamp: new Date(now.getTime() - index * 35 * 60000).toISOString()
+        });
+      });
+      computeFlips();
+      setStatus("Demo data loaded");
+      render();
+    }
+
+    async function handleFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      setBusy(true, "Reading file...");
+      try {
+        const text = await file.text();
+        let parsed;
+        if (file.name.toLowerCase().endsWith(".json")) {
+          parsed = JSON.parse(text);
+        } else {
+          parsed = parseCsv(text);
+        }
+        marketRows = normalizeRows(Array.isArray(parsed) ? parsed : parsed.data || []);
+        computeFlips();
+        setStatus(`Imported ${marketRows.length.toLocaleString()} rows`);
+        render();
+      } catch (error) {
+        console.error(error);
+        setStatus("Import failed. Check file columns.");
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function parseCsv(text) {
+      const lines = text.split(/\r?\n/).filter(line => line.trim());
+      if (!lines.length) return [];
+      const headers = splitCsvLine(lines[0]).map(header => header.trim());
+      return lines.slice(1).map(line => {
+        const values = splitCsvLine(line);
+        return headers.reduce((row, header, index) => {
+          row[header] = values[index] || "";
+          return row;
+        }, {});
+      });
+    }
+
+    function splitCsvLine(line) {
+      const cells = [];
+      let current = "";
+      let quoted = false;
+      for (let i = 0; i < line.length; i += 1) {
+        const char = line[i];
+        const next = line[i + 1];
+        if (char === '"' && quoted && next === '"') {
+          current += '"';
+          i += 1;
+        } else if (char === '"') {
+          quoted = !quoted;
+        } else if (char === "," && !quoted) {
+          cells.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      cells.push(current);
+      return cells;
+    }
+
+    function normalizeRows(rows) {
+      return rows.map(row => {
+        const city = row.city || row.location || row.Location || "";
+        const item_id = row.item_id || row.itemId || row.ItemTypeId || row.item || "";
+        const quality = Number(row.quality || row.QualityLevel || 1);
+        const timestamp = row.sell_price_min_date || row.buy_price_max_date || row.timestamp || row.Timestamp || "";
+        return {
+          item_id: String(item_id).toUpperCase(),
+          city: String(city),
+          quality,
+          sell_price_min: Number(row.sell_price_min || row.sellPriceMin || row.SellPriceMin || 0),
+          buy_price_max: Number(row.buy_price_max || row.buyPriceMax || row.BuyPriceMax || 0),
+          timestamp
+        };
+      }).filter(row => row.item_id && row.city);
+    }
+
+    function computeFlips() {
+      const cities = selectedCities();
+      const taxRate = Number(els.taxRate.value || 0) / 100;
+      const groups = new Map();
+      marketRows.forEach(row => {
+        const key = `${row.item_id}|${row.quality}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(row);
+      });
+
+      flips = [];
+      groups.forEach(rows => {
+        const blackMarketRows = rows.filter(row => row.city === BLACK_MARKET && row.buy_price_max > 0);
+        if (!blackMarketRows.length) return;
+
+        const bestBlackMarket = blackMarketRows.reduce((best, row) => {
+          return row.buy_price_max > best.buy_price_max ? row : best;
+        }, blackMarketRows[0]);
+
+        rows.forEach(row => {
+          if (!cities.includes(row.city) || row.sell_price_min <= 0) return;
+          const netSell = bestBlackMarket.buy_price_max * (1 - taxRate);
+          const profit = netSell - row.sell_price_min;
+          const roi = row.sell_price_min > 0 ? profit / row.sell_price_min * 100 : 0;
+          const ageHours = Math.max(ageHoursFor(row.timestamp), ageHoursFor(bestBlackMarket.timestamp));
+          flips.push({
+            item_id: row.item_id,
+            item_name: itemName(row.item_id),
+            city: row.city,
+            quality: row.quality,
+            buy: row.sell_price_min,
+            black: bestBlackMarket.buy_price_max,
+            netSell,
+            profit,
+            roi,
+            ageHours
+          });
+        });
+      });
+    }
+
+    function filteredFlips() {
+      const showAll = els.showAll.checked;
+      const minProfit = Number(els.minProfit.value || 0);
+      const minRoi = Number(els.minRoi.value || 0);
+      const maxAge = Number(els.maxAge.value || 999999) / 60;
+      const maxBuy = Number(els.maxBuy.value || 0);
+      const quality = els.qualityFilter.value;
+      const search = els.searchBox.value.trim().toLowerCase();
+
+      let rows = flips.filter(flip => {
+        const matchesSearch = !search ||
+          flip.item_id.toLowerCase().includes(search) ||
+          flip.item_name.toLowerCase().includes(search) ||
+          flip.city.toLowerCase().includes(search);
+        const matchesProfit = showAll || (flip.profit >= minProfit && flip.roi >= minRoi);
+        const matchesBuyLimit = maxBuy <= 0 || flip.buy <= maxBuy;
+        return matchesProfit &&
+          flip.ageHours <= maxAge &&
+          matchesBuyLimit &&
+          (quality === "all" || String(flip.quality) === quality) &&
+          matchesSearch;
+      });
+
+      const sortBy = els.sortBy.value;
+      rows = [...rows].sort((a, b) => {
+        if (sortBy === "roi") return b.roi - a.roi;
+        if (sortBy === "buy") return a.buy - b.buy;
+        if (sortBy === "age") return a.ageHours - b.ageHours;
+        return b.profit - a.profit;
+      });
+      return rows;
+    }
+
+    function render() {
+      if (marketRows.length) {
+        computeFlips();
+      }
+      const rows = filteredFlips();
+      const qty = Math.max(1, Number(els.quantity.value || 1));
+      els.resultsBody.innerHTML = rows.map(flip => `
+        <tr>
+          <td>
+            <div class="item-cell">
+              <img class="item-icon" src="${itemIconUrl(flip.item_id, flip.quality)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+              <div class="item-name">
+                <strong>${escapeHtml(flip.item_name)}</strong>
+                <code>${escapeHtml(flip.item_id)}</code>
+              </div>
+            </div>
+          </td>
+          <td>${escapeHtml(flip.city)}</td>
+          <td><span class="tag">${QUALITY_NAMES[flip.quality] || flip.quality}</span></td>
+          <td>${fmt(flip.buy)}</td>
+          <td>${fmt(flip.black)}</td>
+          <td>${fmt(flip.netSell)}</td>
+          <td class="${flip.profit >= 0 ? "profit" : "loss"}">${fmt(flip.profit * qty)}</td>
+          <td class="${flip.roi >= 0 ? "profit" : "loss"}">${flip.roi.toFixed(1)}%</td>
+          <td>${ageLabel(flip.ageHours)}</td>
+        </tr>
+      `).join("");
+      els.emptyState.textContent = emptyMessage(rows);
+      els.emptyState.style.display = rows.length ? "none" : "block";
+      updateMetrics(rows, qty);
+    }
+
+    function updateMetrics(rows, qty) {
+      const sortedVisibleByProfit = [...rows].sort((a, b) => b.profit - a.profit);
+      const sortedVisibleByRoi = [...rows].sort((a, b) => b.roi - a.roi);
+      const bestProfit = sortedVisibleByProfit[0] || null;
+      const bestRoi = sortedVisibleByRoi[0] || null;
+      const totalPotential = rows.filter(row => row.profit > 0).slice(0, 20).reduce((sum, row) => sum + row.profit * qty, 0);
+
+      els.bestProfit.textContent = bestProfit ? fmt(bestProfit.profit * qty) : "0";
+      els.bestProfitMeta.textContent = bestProfit ? `${bestProfit.item_name} from ${bestProfit.city}` : "No profitable visible rows";
+      els.bestRoi.textContent = bestRoi ? `${bestRoi.roi.toFixed(1)}%` : "0%";
+      els.bestRoiMeta.textContent = bestRoi ? `${bestRoi.item_name} from ${bestRoi.city}` : "No profitable visible rows";
+      els.shownCount.textContent = rows.length.toLocaleString();
+      els.totalCount.textContent = `${flips.length.toLocaleString()} total scanned`;
+      els.totalPotential.textContent = fmt(totalPotential);
+      els.potentialMeta.textContent = rows.length ? "Profitable visible top 20" : "At selected quantity";
+    }
+
+    function emptyMessage(rows) {
+      if (!marketRows.length) return "Load live prices, import data, or use demo data to start scanning.";
+      if (!flips.length) return "Prices loaded, but no Caerleon and Black Market item pairs were found. Scan the same items in both markets, then load again.";
+      const best = [...flips].sort((a, b) => b.profit - a.profit)[0];
+      if (!rows.length && best) {
+        return `No fresh profitable rows match the current filters. Best scanned candidate is ${best.item_name}: ${fmt(best.profit)} silver profit, ${best.roi.toFixed(1)}% ROI. Raise Max age min or scan both markets again.`;
+      }
+      return "No rows match the current filters.";
+    }
+
+    function exportCsv() {
+      const rows = filteredFlips();
+      if (!rows.length) {
+        setStatus("No rows to export");
+        return;
+      }
+      const headers = ["item_id", "item_name", "city", "quality", "buy_price", "black_market_buy", "net_sell", "profit", "roi", "age_hours"];
+      const csvRows = rows.map(row => [
+        row.item_id,
+        row.item_name,
+        row.city,
+        QUALITY_NAMES[row.quality] || row.quality,
+        Math.round(row.buy),
+        Math.round(row.black),
+        Math.round(row.netSell),
+        Math.round(row.profit),
+        row.roi.toFixed(2),
+        Number.isFinite(row.ageHours) ? row.ageHours.toFixed(2) : ""
+      ]);
+      const csv = [headers, ...csvRows].map(line => line.map(csvCell).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `albion-blackmarket-flips-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setStatus("CSV exported");
+    }
+
+    function csvCell(value) {
+      const text = String(value);
+      return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+    }
+
+    function chunk(values, size) {
+      const chunks = [];
+      for (let i = 0; i < values.length; i += size) {
+        chunks.push(values.slice(i, i + size));
+      }
+      return chunks;
+    }
+
+    function itemName(itemId) {
+      const base = itemId.replace(/^T\d+_/, "").replace(/@\d+$/, "");
+      const tier = itemId.match(/^T(\d+)/)?.[1];
+      const enchant = itemId.match(/@(\d+)$/)?.[1];
+      const name = NAME_HINTS[base] || base.split("_").map(part => part.charAt(0) + part.slice(1).toLowerCase()).join(" ");
+      return `T${tier || "?"}${enchant ? `.${enchant}` : ""} ${name}`;
+    }
+
+    function itemIconUrl(itemId, quality) {
+      const encodedItem = encodeURIComponent(itemId);
+      const encodedQuality = encodeURIComponent(String(quality || 1));
+      return `https://render.albiononline.com/v1/item/${encodedItem}.png?quality=${encodedQuality}`;
+    }
+
+    function ageHoursFor(value) {
+      if (!value) return Infinity;
+      const time = new Date(value).getTime();
+      if (!Number.isFinite(time)) return Infinity;
+      return Math.max(0, (Date.now() - time) / 3600000);
+    }
+
+    function ageLabel(hours) {
+      if (!Number.isFinite(hours)) return "unknown";
+      const minutes = Math.round(hours * 60);
+      if (minutes < 60) return `${minutes}m`;
+      return `${hours.toFixed(1)}h`;
+    }
+
+    function fmt(value) {
+      if (!Number.isFinite(value)) return "0";
+      return Math.round(value).toLocaleString();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function updatePlayerName() {
+      const name = els.playerName.value.trim();
+      els.playerNameText.textContent = name || "Unknown";
+    }
+
+    function setStatus(message) {
+      els.statusText.textContent = message;
+    }
+
+    function setBusy(isBusy, message) {
+      els.loadLiveButton.disabled = isBusy;
+      els.demoButton.disabled = isBusy;
+      if (message) setStatus(message);
+    }
+
+    init();
+  </script>
+</div>
