@@ -1,7 +1,14 @@
-﻿# OS/editor noise
+# OS/editor noise
 .DS_Store
 Thumbs.db
 .vscode/
 
 # Local exports
 *.csv
+
+# Python app build
+build/
+dist/
+*.spec
+__pycache__/
+*.pyc

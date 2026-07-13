@@ -20,7 +20,7 @@ Double-click:
 Start Albion Free Black Market Flips.cmd
 ```
 
-This starts a small local server and opens the app in its own browser window. Keep the folder files together.
+In the Windows release zip, double-clicking this starts the Python-built app server and opens the app in its own browser window. Keep the folder files together. If running from source instead of the release zip, install Python first.
 
 ## How To Run In VS Code
 
