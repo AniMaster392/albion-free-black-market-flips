@@ -12,7 +12,17 @@ Download and run Albion Data Client, then open Albion Online and browse/scroll t
 
 Without Albion Data Client running, prices may be old or missing.
 
-## How To Run
+## How To Run As A Windows App
+
+Double-click:
+
+```text
+Start Albion Free Black Market Flips.cmd
+```
+
+This starts a small local server and opens the app in its own browser window. Keep the folder files together.
+
+## How To Run In VS Code
 
 Open this folder in VS Code:
 
