@@ -3,6 +3,7 @@ import http.server
 import os
 import socket
 import socketserver
+import subprocess
 import sys
 import threading
 import time
@@ -39,7 +40,7 @@ def open_app(url):
     ]
     for edge in edge_paths:
         if edge.exists():
-            os.startfile(str(edge), f'--app={url} --new-window')
+            subprocess.Popen([str(edge), f"--app={url}", "--new-window"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             return
     webbrowser.open(url)
 
