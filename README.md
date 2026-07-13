@@ -11,6 +11,8 @@ You must run the Albion Data Client while using this tool.
 Download and run Albion Data Client, then open Albion Online and browse/scroll the market items you want to scan. The client uploads the live market rows you see in game to Albion Online Data. This app reads those public Albion Online Data prices.
 
 Without Albion Data Client running, prices may be old or missing.
+link:
+https://github.com/ao-data/albiondata-client/releases/tag/0.1.53
 
 ## How To Run As A Windows App
 
